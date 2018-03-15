@@ -44,6 +44,6 @@ class Inscrito(models.Model):
     aprovado_em = models.DateTimeField(null = True)
     reprovado_em = models.DateTimeField(null = True)
     aluno = models.ForeignKey(Aluno, on_delete = models.CASCADE)
-    edital = models.ForeignKey(Aluno, on_delete = models.CASCADE)
+    edital = models.ForeignKey(Edital, on_delete = models.CASCADE)
     status = models.IntegerField(default = 0)
     observacoes = models.TextField()
