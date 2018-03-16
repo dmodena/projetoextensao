@@ -1,0 +1,45 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+  <nav aria-label="breadcrumb" role="navigation">
+    <ol class="breadcrumb breadcrumb-dark">
+      <li class="breadcrumb-item"><a href="{% url 'editais' %}">SisExtensão</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Login</li>
+    </ol>
+  </nav>
+
+
+  <h2>Login</h2>
+  <hr />
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-sm-6 offset-sm-3 col-md-4 offset-md-4">
+        <div class="card border-primary">
+          <div class="card-header">
+            Entre com suas credenciais
+          </div>
+          <div class="card-body text-primary">
+            {% for field in form %}
+            <div class="row">
+              <div class="col">
+                <label>{{field.label_tag}}</label>
+              </div>
+              <div class="col">
+                {{field}}
+              </div>
+              {% for error in field.errors %}
+              <div class="col">
+                <small class="form-text text-muted">{{error}}</small>
+              </div>
+              {% endfor %}
+            </div>
+            {% endfor %}
+            <button class="btn btn-primary" type="submit" style="margin-top: 1em;">Login</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+{% endblock %}
