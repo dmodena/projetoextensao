@@ -1,0 +1,112 @@
+{% extends 'core/base.html' %}
+{% load custom_filters %}
+
+{% block content %}
+
+{% if mensagem != None %}
+<div class="alert alert-dark alert-dismissible fade show" role="alert">
+  {{mensagem}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endif %}
+
+{% if request.user.is_superuser%}
+<span>Loading time: </span><span>{{tempo}}</span>
+{% endif %}
+
+  <nav aria-label="breadcrumb" role="navigation">
+    <ol class="breadcrumb breadcrumb-dark">
+      <li class="breadcrumb-item"><a href="{% url 'editais' %}">SisExtensão</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Editais</li>
+    </ol>
+  </nav>
+
+  <h2>Editais</h2>
+  <div class="input-group">
+    <span class="input-group-addon" id="buscalbl">Busca</span>
+    <input id="busca" type="text" onkeyup="buscaEditais()" class="form-control" placeholder="Digite para filtrar" autofocus="autofocus" aria-label="busca" aria-describedby="buscalbl">
+  </div>
+  <hr />
+
+  {% if request.user.is_staff %}
+  <a href="{% url 'editais/novo' %}" class="btn btn-primary">Novo Edital</a>
+  {% endif %}
+  <br />
+
+
+    {% for edital in editais %}
+    <div class="card" style="margin-top: 1em; margin-bottom: 1em;">
+      {% if edital.ativo %}
+      <div class="card-body">
+      {% else %}
+      <div class="card-body text-dark">
+      {% endif %}
+        <h2>{{edital.titulo}}</h2>
+
+        <div class="row">
+          <div class="col">
+            <p class="lead">
+              {{edital.descricao}}
+            </p>
+          </div>
+        </div>
+        <br />
+        <div class="row">
+          <div class="col">
+            <p>
+              <strong>Inscrições: </strong>
+              <span>de {{edital.inicio_inscricoes|date_mask}} a {{edital.fim_inscricoes|date_mask}}</span>
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <p>
+              <strong>Período de curso: </strong>
+              <span>de {{edital.inicio_curso|date_mask}} a {{edital.fim_curso|date_mask}}</span>
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <p>
+              <strong>Quantidade de vagas: </strong><span>{{edital.vagas}}</span>
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <strong>Pré-requisitos: </strong>
+            <blockquote>{{edital.pre_requisitos}}</blockquote>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <p>
+              <strong>Ver edital completo: </strong><span><a href="{{edital.edital_link}}" target="_blank">Link para edital</a></span>
+            </p>
+          </div>
+        </div>
+
+        {% if request.user.is_authenticated %}
+        <div class="row">
+          {% if request.user.is_staff %}
+          <div class="col-sm-4 offset-sm-8">
+            <a href="{% url 'editais/editar' edital.id %}" class="btn btn-info">Editar</a>
+            <a href="{% url 'editais/deletar' edital.id %}" class="btn btn-danger">Excluir</a>
+          </div>
+          {% else %}
+            {% if edital.ativo %}
+            <div class="col-sm-3 offset-sm-9">
+              <a href="{% url 'inscricoes/novo' edital.id %}" class="btn btn-secondary">Inscrever-se</a>
+            </div>
+            {% endif %}
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+{% endblock %}
