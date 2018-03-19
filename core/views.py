@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from core.models import Edital, Aluno, Inscrito
 from core.forms import EditalForm, AlunoForm
 from core.utils import static_files_url
@@ -13,16 +13,24 @@ def editais(request, mensagem = None):
 def r_editais(request):
     return redirect(editais)
 
-def edital_create():
+def edital_create(request):
     form = EditalForm(request.POST or None)
     if request.method == 'POST':
-        if form.is_valid():
+        if form.is_valid() and request.user.is_staff:
             form.save()
             return redirect(editais)
     return render(request, 'core/editais/novo.html', {'form': form})
 
-def edital_edit():
-    return None
+def edital_edit(request, id):
+    edital = Edital.objects.get(id=id)
+    form = EditalForm(request.POST or None, instance = edital)
+    if form.is_valid() and request.user.is_staff:
+        form.save()
+        return redirect(editais)
+    return render(request, 'core/editais/novo.html', {'form': form})
 
-def edital_remove():
-    return None
+def edital_remove(request, id):
+    edital = Edital.objects.get(id=id)
+    if request.user.is_staff:
+        edital.delete()
+    return redirect(editais)

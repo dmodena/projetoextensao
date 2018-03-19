@@ -95,7 +95,7 @@
           {% if request.user.is_staff %}
           <div class="col-sm-4 offset-sm-8">
             <a href="{% url 'editais/editar' edital.id %}" class="btn btn-info">Editar</a>
-            <a href="{% url 'editais/deletar' edital.id %}" class="btn btn-danger">Excluir</a>
+            <a href="{% url 'editais/excluir' edital.id %}" class="btn btn-danger">Excluir</a>
           </div>
           {% else %}
             {% if edital.ativo %}
