@@ -26,7 +26,7 @@
         {% if request.user.is_authenticated %}
           {% if request.user.is_staff %}
             <li class="nav-item">
-              <a class="nav-link" href="#">Alunos</a>
+              <a class="nav-link" href="{% url 'alunos' %}">Alunos</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Inscrições</a>
@@ -47,7 +47,7 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               {% if request.user.is_staff == False %}
-                <a class="dropdown-item" href="#">Meus dados</a>
+                <a class="dropdown-item" href="{% url 'alunos' %}">Meus dados</a>
                 <div class="dropdown-divider"></div>
               {% endif %}
               <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
@@ -57,7 +57,7 @@
         {% else %}
           <a class="btn btn-outline-info my-1 my-sm-0" href="{% url 'login' %}">Login</a>
           <span>|</span>
-          <a class="btn btn-outline-success my-1 my-sm-0" href="#">Registrar</a>
+          <a class="btn btn-outline-success my-1 my-sm-0" href="{% url 'registrar' %}">Registrar</a>
         {% endif %}
       </form>
     </div>

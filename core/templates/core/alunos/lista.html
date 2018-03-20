@@ -1,0 +1,94 @@
+{% extends 'core/base.html' %}
+{% load custom_filters %}
+
+{% block content %}
+
+{% if request.user.is_superuser%}
+<span>Loading time: </span><span>{{tempo}}</span>
+{% endif %}
+
+  <nav aria-label="breadcrumb" role="navigation">
+    <ol class="breadcrumb breadcrumb-dark">
+      <li class="breadcrumb-item"><a href="{% url 'editais' %}">SisExtensão</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Alunos</li>
+    </ol>
+  </nav>
+
+  <h2>Alunos</h2>
+  <div class="input-group">
+    <span class="input-group-addon" id="buscalbl">Busca</span>
+    <input id="busca" type="text" onkeyup="buscaAlunos()" class="form-control" placeholder="Digite para filtrar" autofocus="autofocus" aria-label="busca" aria-describedby="buscalbl">
+  </div>
+  <hr />
+
+  {% for aluno in alunos %}
+  <div class="card" style="margin-top: 1em; margin-bottom: 1em;">
+    {% if aluno.ativo %}
+    <div class="card-body">
+    {% else %}
+    <div class="card-body text-dark">
+    {% endif %}
+      <h2>{{aluno.nome}}</h2>
+
+      <div class="row">
+        <div class="col">
+          <p>
+            <strong>Endereço: </strong>
+            <span>{{aluno.logradouro}}, {{aluno.numero}}{% if aluno.complemento %} - {{aluno.complemento}}{% endif %}</span>
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <p>
+            <strong>CEP: </strong>
+            <span>{{aluno.cep}} - {{aluno.cidade}}/{{aluno.estado}}</span>
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <strong>RG: </strong>
+          <span>{{aluno.rg}}</span>
+        </div>
+        <div class="col">
+          <strong>CPF: </strong>
+          <span>{{aluno.cpf}}</span>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1em;">
+        <div class="col">
+          <p>
+            <strong>E-mail: </strong>
+            <span>{{aluno.email}}</span>
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <p>
+            <strong>Telefone: </strong>
+            <span>{{aluno.telefone}}</span>
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <p>
+            <strong>Data de nascimento: </strong>
+            <span>{{aluno.nascimento|date_mask}}</span>
+          </p>
+        </div>
+      </div>
+
+      {% if request.user.is_authenticated %}
+      <div class="row">
+        <div class="col-sm-3 offset-sm-9">
+          <a href="{% url 'alunos/editar' aluno.id %}" class="btn btn-info">Editar</a>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+{% endblock %}

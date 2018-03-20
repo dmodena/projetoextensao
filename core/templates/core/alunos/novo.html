@@ -1,0 +1,33 @@
+{% extends 'core/base.html' %}
+
+{% block content%}
+  <nav aria-label="breadcrumb" role="navigation">
+    <ol class="breadcrumb breadcrumb-dark">
+      <li class="breadcrumb-item"><a href="{% url 'editais' %}">SisExtensão</a></li>
+      {% if request.user.is_staff %}
+      <li class="breadcrumb-item"><a href="{% url 'alunos' %}">Alunos</a></li>
+      {% else %}
+      <li class="breadcrumb-item"><a href="#">Alunos</a></li>
+      {% endif %}
+      <li class="breadcrumb-item active" aria-current="page">Info</li>
+    </ol>
+  </nav>
+
+  <h2>Aluno</h2>
+  <hr />
+
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="form-group">
+      <label>{{field.label_tag}}</label>
+      <br />
+      {{field}}
+      {% for error in field.errors %}
+      <small class="form-text text-muted">{{error}}</small>
+      {% endfor %}
+    </div>
+    {% endfor %}
+    <button class="btn btn-primary" type="submit">Salvar</button>
+  </form>
+{% endblock %}
