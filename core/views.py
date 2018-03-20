@@ -136,6 +136,12 @@ def inscricoes_remove(request, id):
     inscrito.delete()
     return redirect('inscricoes/aluno')
 
+def certificado(request, id):
+    inscrito = Inscrito.objects.get(id=id)
+    edital = Edital.objects.get(id=inscrito.edital.id)
+    aluno = Aluno.objects.get(id=inscrito.aluno.id)
+    return render(request, 'core/certificados/certificado.html', {'inscrito': inscrito, 'edital': edital, 'aluno': aluno, 'static_url': static_files_url})
+
 def signup(request):
     if request.method == 'POST':
         form_user = UserCreationForm(request.POST)

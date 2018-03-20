@@ -41,7 +41,7 @@
           </td>
         {% elif inscrito.status == 3 %}
           <td>Aprovado</td>
-          <td><a href="#" class="btn btn-secondary">Certificado</a></td>
+          <td><a href="{% url 'certificado' inscrito.id %}" class="btn btn-secondary">Certificado</a></td>
         {% elif inscrito.status == 4 %}
           <td>Reprovado</td>
           <td></td>

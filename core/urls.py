@@ -2,7 +2,7 @@ from django.urls import path
 from core import views
 
 urlpatterns = [
-    path('', views.home),
+    path('', views.r_editais),
 
     path('editais/', views.editais, name='editais'),
     path('editais/novo/', views.edital_create, name='editais/novo'),
@@ -22,6 +22,8 @@ urlpatterns = [
     path('inscricoes/aprovar/<id>', views.inscricoes_aprovar, name='inscricao/aprovar'),
     path('inscricoes/reprovar/<id>', views.inscricoes_reprovar, name='inscricao/reprovar'),
     path('inscricoes/excluir/<id>', views.inscricoes_remove, name='inscricao/excluir'),
+
+    path('certificados/<id>', views.certificado, name='certificado'),
 
     path('registrar/', views.signup, name='registrar'),
 ]
