@@ -13,5 +13,15 @@ urlpatterns = [
     path('alunos/novo/', views.aluno_create, name='alunos/novo'),
     path('alunos/editar/<id>', views.aluno_edit, name='alunos/editar'),
 
+    path('inscricoes/', views.inscricoes, name='inscricoes'),
+    path('inscricoes/edital/<id>', views.inscricoes_edital, name='inscricoes/edital'),
+    path('inscricoes/aluno/', views.inscricoes_aluno, name='inscricoes/aluno'),
+    path('inscricoes/edital/novo/<id>', views.inscricoes_create, name='inscricao/nova'),
+    path('inscricoes/matricular/<id>', views.inscricoes_matricular, name='inscricao/matricular'),
+    path('inscricoes/cancelar/<id>', views.inscricoes_cancelar, name='inscricao/cancelar'),
+    path('inscricoes/aprovar/<id>', views.inscricoes_aprovar, name='inscricao/aprovar'),
+    path('inscricoes/reprovar/<id>', views.inscricoes_reprovar, name='inscricao/reprovar'),
+    path('inscricoes/excluir/<id>', views.inscricoes_remove, name='inscricao/excluir'),
+
     path('registrar/', views.signup, name='registrar'),
 ]

@@ -100,7 +100,7 @@
           {% else %}
             {% if edital.ativo %}
             <div class="col-sm-3 offset-sm-9">
-              <a href="#" class="btn btn-secondary">Inscrever-se</a>
+              <a href="{% url 'inscricao/nova' edital.id %}" class="btn btn-secondary">Inscrever-se</a>
             </div>
             {% endif %}
           {% endif %}

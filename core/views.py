@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 from core.models import Edital, Aluno, Inscrito
 from core.forms import EditalForm, AlunoForm
 from core.utils import static_files_url
+from django.utils import timezone
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
+# from django.core.email import send_email
 
 def home(request):
     return render(request, 'core/index.html')
@@ -63,6 +65,76 @@ def aluno_edit(request, id):
         form.save()
         return redirect(alunos)
     return render(request, 'core/alunos/novo.html', {'form': form, 'static_url': static_files_url})
+
+def inscricoes(request):
+    editais = Edital.objects.all().order_by('titulo')
+    return render(request, 'core/inscricoes/lista.html', {'editais': editais, 'static_url': static_files_url})
+
+def inscricoes_edital(request, id):
+    edital = Edital.objects.get(id=id)
+    inscritos = Inscrito.objects.filter(edital=edital).order_by('inscrito_em')
+    return render(request, 'core/inscricoes/edital.html', {'inscritos': inscritos, 'static_url': static_files_url})
+
+def inscricoes_aluno(request):
+    aluno = Aluno.objects.get(created_by=request.user)
+    inscritos = Inscrito.objects.filter(aluno=aluno).order_by('inscrito_em')
+    return render(request, 'core/inscricoes/aluno.html', {'inscritos': inscritos, 'static_url': static_files_url})
+
+def inscricoes_create(request, id):
+    edital = Edital.objects.get(id=id)
+    aluno = Aluno.objects.get(created_by=request.user)
+    if aluno == None:
+        return redirect(editais)
+    qtd_inscricoes = Inscrito.objects.filter(aluno=aluno, edital=edital).count()
+    if qtd_inscricoes > 0:
+        mensagem = "Aluno já inscrito!"
+        return editais(request, mensagem)
+    inscrito = Inscrito()
+    inscrito.aluno = aluno
+    inscrito.edital = edital
+    inscrito.status = 1
+    inscrito.save()
+    mensagem = "Inscrição realizada com sucesso!"
+    # send_email('SisExtensão - Inscrição em curso', 'Obrigado por se inscrever em um de nosso cursos! Aguarde a confirmação de sua matrícula.', 'sisextensao@example.com', [inscrito.email])
+    return editais(request, mensagem)
+
+def inscricoes_matricular(request, id):
+    inscrito = Inscrito.objects.get(id=id)
+    edital = inscrito.edital
+    inscrito.status = 2
+    inscrito.matriculado_em = timezone.now()
+    inscrito.save()
+    # send_email('SisExtensão - Matrícula em curso', 'Parabéns! Você foi selecionado para iniciar seu curso! Entre em contato com o Campus para realizar sua matrícula.', 'sisextensao@example.com', [inscrito.email])
+    return redirect('inscricoes/edital', id=edital.id)
+
+def inscricoes_cancelar(request, id):
+    inscrito = Inscrito.objects.get(id=id)
+    edital = inscrito.edital
+    inscrito.status = 1
+    inscrito.matriculado_em = None
+    inscrito.save()
+    return redirect('inscricoes/edital', id=edital.id)
+
+def inscricoes_aprovar(request, id):
+    inscrito = Inscrito.objects.get(id=id)
+    edital = inscrito.edital
+    inscrito.status = 3
+    inscrito.aprovado_em = timezone.now()
+    inscrito.save()
+    return redirect('inscricoes/edital', id=edital.id)
+
+def inscricoes_reprovar(request, id):
+    inscrito = Inscrito.objects.get(id=id)
+    edital = inscrito.edital
+    inscrito.status = 4
+    inscrito.reprovado_em = timezone.now()
+    inscrito.save()
+    return redirect('inscricoes/edital', id=edital.id)
+
+def inscricoes_remove(request, id):
+    inscrito = Inscrito.objects.get(id=id)
+    inscrito.delete()
+    return redirect('inscricoes/aluno')
 
 def signup(request):
     if request.method == 'POST':

@@ -29,11 +29,11 @@
               <a class="nav-link" href="{% url 'alunos' %}">Alunos</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Inscrições</a>
+              <a class="nav-link" href="{% url 'inscricoes' %}">Inscrições</a>
             </li>
           {% else %}
             <li class="nav-item">
-              <a class="nav-link" href="#">Minhas Inscrições</a>
+              <a class="nav-link" href="{% url 'inscricoes/aluno' %}">Minhas Inscrições</a>
             </li>
           {% endif %}
         {% endif %}

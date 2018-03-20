@@ -1,0 +1,55 @@
+{% extends 'core/base.html' %}
+{% load custom_filters %}
+
+{% block content %}
+  <nav aria-label="breadcrumb" role="navigation">
+    <ol class="breadcrumb breadcrumb-dark">
+      <li class="breadcrumb-item"><a href="{% url 'editais' %}">SisExtensão</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Minhas Inscrições</li>
+    </ol>
+  </nav>
+
+  <h2>Inscrições</h2>
+  <hr />
+
+  <table class="table table-stripped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Data da Inscrição</th>
+        <th scope="col">Edital</th>
+        <th scope="col">Aluno</th>
+        <th scope="col">Status</th>
+        <th scope="col">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for inscrito in inscritos %}
+      <tr>
+        <td>{{inscrito.inscrito_em|datetime_mask}}</td>
+        <td>{{inscrito.edital.titulo}}</td>
+        <td>{{inscrito.aluno.nome}}</td>
+        {% if inscrito.status == 1 %}
+          <td>Inscrito</td>
+          <td>
+            <a href="{% url 'inscricao/excluir' inscrito.id %}" class="btn btn-danger">Excluir</a>
+          </td>
+        {% elif inscrito.status == 2 %}
+          <td>Matriculado</td>
+          <td>&#32;</td>
+        {% elif inscrito.status == 3 %}
+          <td>Aprovado</td>
+          <td>
+            <a href="#" class="btn btn-secondary">Certificado</a>
+          </td>
+        {% elif inscrito.status == 4 %}
+          <td>Reprovado</td>
+          <td>&#32;</td>
+        {% else %}
+          <td>&#32;</td>
+          <td>&#32;</td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
