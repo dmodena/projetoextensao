@@ -4,7 +4,7 @@ Django==2.0.2
 django-excel-response2==2.0.8
 django-six==1.0.4
 gunicorn==19.7.1
-Jinja2==2.10
+Jinja2==2.11.3
 livereload==2.5.1
 Markdown==2.6.9
 MarkupSafe==1.0
